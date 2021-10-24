@@ -16,8 +16,7 @@ public class Calculator {
      */
     public Integer getNumberOfChar(String zipFilePath, char character) {
         int countOfCharacter = 0;
-        try {
-            ZipFile zipFile = new ZipFile(zipFilePath);
+        try (ZipFile zipFile = new ZipFile(zipFilePath)){
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             while (entries.hasMoreElements()){
                 ZipEntry entry = entries.nextElement();
@@ -28,7 +27,9 @@ public class Calculator {
                         .filter(symbol -> symbol != ' ')
                         .mapToObj(e -> (char) e)
                         .collect(Collectors.toList());
-                countOfCharacter += charText.stream().filter(symbol -> symbol == character).count();
+                countOfCharacter += charText.stream().
+                        filter(symbol -> symbol == character)
+                        .count();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,8 +44,7 @@ public class Calculator {
 
     public Integer getMaxWordLength(String zipFilePath) {
         int maxWordLength = 0;
-        try {
-            ZipFile zipFile = new ZipFile(zipFilePath);
+        try (ZipFile zipFile = new ZipFile(zipFilePath)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             while (entries.hasMoreElements()){
                 ZipEntry entry = entries.nextElement();
@@ -52,8 +52,7 @@ public class Calculator {
                         .lines()
                         .collect(Collectors.joining(" "));
                 List<String> listOfWords = new ArrayList<>(Arrays.asList(fileContent.split(" ")));
-                maxWordLength = listOfWords
-                        .stream()
+                maxWordLength = listOfWords.stream()
                         .max(Comparator.comparing(String::length))
                         .get()
                         .length();
@@ -63,5 +62,4 @@ public class Calculator {
         }
         return maxWordLength;
     }
-
 }
