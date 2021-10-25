@@ -52,10 +52,14 @@ public class Calculator {
                         .lines()
                         .collect(Collectors.joining(" "));
                 List<String> listOfWords = new ArrayList<>(Arrays.asList(fileContent.split(" ")));
-                maxWordLength = listOfWords.stream()
+                int currMaxWordLength = listOfWords.stream()
                         .max(Comparator.comparing(String::length))
                         .get()
                         .length();
+                if (currMaxWordLength > maxWordLength) {
+                    maxWordLength = currMaxWordLength;
+                }
+                //maxWordLength = Arrays.stream(fileContent.split("\\s")).max(Comparator.comparing(String::length)).get().length();
             }
         } catch (IOException e) {
             e.printStackTrace();
